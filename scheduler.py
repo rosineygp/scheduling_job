@@ -1,6 +1,9 @@
 import json
 from datetime import datetime
+import re
+import pprint
 
+pp = pprint.PrettyPrinter()
 
 def str_to_time(strtime):
   return datetime.strptime(strtime, '%Y-%m-%d %H:%M:%S')
@@ -19,11 +22,11 @@ def str_natural_to_time(str):
       n = int(tokens[i])
 
       time_str = tokens[i + 1]
-      if time_str == 'horas':
+      if re.search('^hora(s|)(,|)$', time_str):
         hours = n
-      elif time_str == 'minutos':
+      elif re.search('^minuto(s|)(,|)$', time_str):
         minutes = n
-      elif time_str == 'segundos':
+      elif re.search('^segundo(s|)(,|)$', time_str):
         seconds = n
     except:
       pass
@@ -31,13 +34,17 @@ def str_natural_to_time(str):
   return datetime.strptime(f"{hours}:{minutes}:{seconds}", "%H:%M:%S")
 
 
-with open('jobs.json') as json_file:
-  data = json.load(json_file)
+if __name__ == "__main__":
+  with open('jobs.json') as json_file:
+    data = json.load(json_file)
 
 
-# fix data
-for i in data:
-  i['Data Máxima de conclusão'] = str_to_time(i['Data Máxima de conclusão'])
-  i['Tempo estimado'] = str_natural_to_time(i['Tempo estimado'])
+  # fix data
+  for i in data:
+    i['Data Máxima de conclusão'] = str_to_time(i['Data Máxima de conclusão'])
+    i['Tempo estimado'] = str_natural_to_time(i['Tempo estimado'])
 
-print(data)
+  data = sorted(data, key=lambda k: k['Data Máxima de conclusão'])
+  pp.pprint(data)
+
+  # pp.pprint(sorted(data, key=lambda k: k['Data Máxima de conclusão']))
