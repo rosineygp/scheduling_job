@@ -1,0 +1,56 @@
+# pipeline autogen by mkdkr_exporter
+# https://gitlab.com/rosiney.gp/mkdkr_exporter
+
+name: CI
+
+on: [push]
+
+jobs:
+  lint_pylint:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: lint pylint
+      run: make lint.pylint
+  lint_commit:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: lint commit
+      run: make lint.commit
+  test_unit-3_6:
+    runs-on: ubuntu-18.04
+    needs:
+      - lint_pylint
+      - lint_commit
+    steps:
+    - uses: actions/checkout@v1
+    - name: test unit-3 6
+      run: make test.unit-3.6
+  test_unit-3_7:
+    runs-on: ubuntu-18.04
+    needs:
+      - lint_pylint
+      - lint_commit
+    steps:
+    - uses: actions/checkout@v1
+    - name: test unit-3 7
+      run: make test.unit-3.7
+  test_unit-3_8:
+    runs-on: ubuntu-18.04
+    needs:
+      - lint_pylint
+      - lint_commit
+    steps:
+    - uses: actions/checkout@v1
+    - name: test unit-3 8
+      run: make test.unit-3.8
+  test_unit-3_9:
+    runs-on: ubuntu-18.04
+    needs:
+      - lint_pylint
+      - lint_commit
+    steps:
+    - uses: actions/checkout@v1
+    - name: test unit-3 9
+      run: make test.unit-3.9
