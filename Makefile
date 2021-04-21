@@ -9,6 +9,7 @@ format.autopep8:
 lint.pylint:
 	@$(dkr)
 	instance: python:3.8
+	run: pip install -r requirements.txt
 	run: pip install pylint
 	run: 'find . -type f -name "*.py" | xargs pylint -E'
 
