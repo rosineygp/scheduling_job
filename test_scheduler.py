@@ -83,9 +83,25 @@ class TestScheduler(unittest.TestCase):
       f = list(filter(wf, data))
       assert(len(f) == 0)
 
-
   def test_sum_until_max(self):
-    pass
+    with open('jobs.json') as json_file:
+      data = json.load(json_file)
+
+      for i in data:
+        i['Tempo estimado'] = scheduler.str_natural_to_time(
+            i['Tempo estimado'])
+
+      max_time = scheduler.str_natural_to_time('8 horas')
+      l = scheduler.sum_until_max(data, max_time['datetime'])
+      assert(len(l) == 2)
+
+      max_time = scheduler.str_natural_to_time('1 horas')
+      l = scheduler.sum_until_max(data, max_time['datetime'])
+      assert(len(l) == 0)
+
+      max_time = scheduler.str_natural_to_time('23 horas e 59 minutos')
+      l = scheduler.sum_until_max(data, max_time['datetime'])
+      assert(len(l) == 3)
 
 
 if __name__ == "__main__":
