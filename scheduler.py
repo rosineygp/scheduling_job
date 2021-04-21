@@ -27,10 +27,10 @@ def str_natural_to_time(str):
 
     Returns:
     dict:
-      int: hours
-      int: minutes
-      int: seconds
-      datetime: Object datetime
+        int: hours
+        int: minutes
+        int: seconds
+        datetime: Object datetime
     """
     hours = 0
     minutes = 0
