@@ -1,4 +1,9 @@
-# Scheduling Job
+# Scheduling Job <!-- omit in toc -->
+
+- [Install packages](#install-packages)
+- [Configure git hooks](#configure-git-hooks)
+- [Run unit tests](#run-unit-tests)
+
 
 Dado um array de "jobs" para execução, no qual cada posição possui um objeto com os seguintes atributos:
 
@@ -30,20 +35,20 @@ Janela de execução: 2019-11-10 09:00:00 até 2019-11-11 12:00:00
   {
     "ID": 1,
     "Descrição": "Importação de arquivos de fundos",
-    "Data Máxima de conclusão": 2019-11-10 12: 00: 00,
-    "Tempo estimado": 2 horas,
+    "Data Máxima de conclusão": "2019-11-10 12:00:00",
+    "Tempo estimado": "2 horas"
   },
   {
     "ID": 2,
     "Descrição": "Importação de dados da Base Legada",
-    "Data Máxima de conclusão": 2019-11-11 12: 00: 00,
-    "Tempo estimado": 4 horas,
+    "Data Máxima de conclusão": "2019-11-11 12:00:00",
+    "Tempo estimado": "4 horas"
   },
   {
     "ID": 3,
     "Descrição": "Importação de dados de integração",
-    "Data Máxima de conclusão": 2019-11-11 08: 00: 00,
-    "Tempo estimado": 6 horas,
+    "Data Máxima de conclusão": "2019-11-11 08:00:00",
+    "Tempo estimado": "6 horas"
   }
 ]
 ```
@@ -55,4 +60,45 @@ Output esperado
   [1, 3],
   [2]
 ]
+```
+
+## Install packages
+
+Project create and tested on `Ubuntu 20.04`.
+
+```bash
+# require python 3.[6..9]
+pip install -r requirements.txt
+
+# run pipeline locally
+sudo apt install make curl git
+
+# install docker
+curl -fsSL https://get.docker.com/ | sudo sh
+```
+
+## Configure git hooks
+
+Check following items:
+
+- pre-commit
+    - autopep8
+    - pylint
+    - unit test
+- pos-commit
+    - commit lint, [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
+
+```bash
+make git.hooks
+```
+
+## Run unit tests
+
+```bash
+# all python version
+make test.unit -j 4 --output-sync
+
+# single version
+# make test.unit-<version>
+make test.unit-3.7
 ```
