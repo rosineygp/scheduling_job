@@ -1,5 +1,6 @@
 import unittest
 from datetime import datetime
+import json
 
 import scheduler
 
@@ -54,6 +55,37 @@ class TestScheduler(unittest.TestCase):
     assert(d['datetime'].hour == 1)
     assert(d['datetime'].minute == 20)
     assert(d['datetime'].second == 35)
+
+  def test_scheduler_windows_filter(self):
+
+    with open('jobs.json') as json_file:
+      data = json.load(json_file)
+
+      for i in data:
+        i['Data Máxima de conclusão'] = scheduler.str_to_time(
+            i['Data Máxima de conclusão'])
+
+      ini = scheduler.str_to_time("2019-11-10 09:00:00")
+      end = scheduler.str_to_time("2019-11-11 12:00:00")
+      wf = scheduler.make_window_filter(ini, end)
+      f = list(filter(wf, data))
+      assert(len(f) == 3)
+
+      ini = scheduler.str_to_time("2019-11-10 09:00:00")
+      end = scheduler.str_to_time("2019-11-10 12:00:00")
+      wf = scheduler.make_window_filter(ini, end)
+      f = list(filter(wf, data))
+      assert(len(f) == 1)
+
+      ini = scheduler.str_to_time("2020-11-10 09:00:00")
+      end = scheduler.str_to_time("2020-11-10 12:00:00")
+      wf = scheduler.make_window_filter(ini, end)
+      f = list(filter(wf, data))
+      assert(len(f) == 0)
+
+
+  def test_sum_until_max(self):
+    pass
 
 
 if __name__ == "__main__":

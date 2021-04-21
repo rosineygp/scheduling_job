@@ -63,24 +63,33 @@ def str_natural_to_time(str):
   }
 
 
-ini = str_to_time("2019-11-10 09:00:00")
-end = str_to_time("2019-11-11 12:00:00")
-
-
-def scheduler_windows_filter(item):
+def make_window_filter(ini, end):
   """
-  Filter jobs between ini and end execution window.
+  Set window parameters for window_filter function.
 
   Parameters:
-  item(dict): single job dict
+  ini (datetime): the beginning of schedule window
+  end (datetime): the end of schedule window
 
   Returns:
-  Boolean: True if the job is in window execution interval, otherwise false.
+  window_filter (lambda): Parametrized sort function
   """
-  if item['Data Máxima de conclusão'] >= ini and item['Data Máxima de conclusão'] <= end:
-    return True
 
-  return False
+  def window_filter(item):
+    """
+    Filter jobs between ini and end execution window.
+
+    Parameters:
+    item(dict): single job dict
+
+    Returns:
+    Boolean: True if the job is in window execution interval, otherwise false.
+    """
+    if item['Data Máxima de conclusão'] >= ini and item['Data Máxima de conclusão'] <= end:
+      return True
+
+    return False
+  return window_filter
 
 
 def sum_until_max(slice, max):
@@ -131,7 +140,11 @@ if __name__ == "__main__":
   max_time = str_natural_to_time('8 horas')
 
   # remove jobs outside execution window
-  filtered = list(filter(scheduler_windows_filter, data))
+  ini = str_to_time("2019-11-10 09:00:00")
+  end = str_to_time("2019-11-11 12:00:00")
+
+  wf = make_window_filter(ini, end)
+  filtered = list(filter(wf, data))
 
   out = []
   i = 0
