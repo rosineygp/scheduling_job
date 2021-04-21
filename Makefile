@@ -24,6 +24,8 @@ pre-commit:
 	make --silent lint.pylint
 	make --silent test.unit -j 4 --output-sync
 
+pos-commit: lint.commit
+
 git.hooks:
 	$(MAKE) .git/hooks/pre-commit
 	$(MAKE) .git/hooks/commit-msg
@@ -33,5 +35,5 @@ git.hooks:
 	chmod +x .git/hooks/pre-commit
 
 .git/hooks/commit-msg:
-	echo "make lint.commit" > .git/hooks/commit-msg
+	echo "make pos-commit" > .git/hooks/commit-msg
 	chmod +x .git/hooks/commit-msg
