@@ -2,7 +2,6 @@ import json
 from datetime import datetime, timedelta
 import re
 import argh
-import os
 
 
 def str_to_time(strtime):
