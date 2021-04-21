@@ -108,7 +108,7 @@ def sum_until_max(slice, max):
 
     result = []
 
-    for i, item in enumerate(slice):
+    for item in slice:
         hours += item['Tempo estimado']['hours']
         minutes += item['Tempo estimado']['minutes']
         seconds += item['Tempo estimado']['seconds']
