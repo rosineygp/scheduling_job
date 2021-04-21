@@ -103,6 +103,19 @@ class TestScheduler(unittest.TestCase):
             l = scheduler.sum_until_max(data, max_time['datetime'])
             assert(len(l) == 3)
 
+    def test_scheduler(self):
+        s = scheduler.scheduler()
+        assert(s == '[[1, 3], [2]]')
+
+        s = scheduler.scheduler(start='2019-11-11 09:00:00')
+        assert(s == '[[2]]')
+
+        s = scheduler.scheduler(finish='2019-11-11 8:00:00')
+        assert(s == '[[1, 3]]')
+
+        s = scheduler.scheduler(max_window='4 horas')
+        assert(s == '[[1], [2]]')
+
 
 if __name__ == "__main__":
     unittest.main()

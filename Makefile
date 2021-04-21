@@ -15,6 +15,7 @@ lint.pylint:
 test.unit-%:
 	@$(dkr)
 	instance: python:$*
+	run: pip install -r requirements.txt
 	run: python test_scheduler.py
 
 test.unit: test.unit-3.6 test.unit-3.7 test.unit-3.8 test.unit-3.9

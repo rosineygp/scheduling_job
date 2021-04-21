@@ -3,6 +3,7 @@
 - [Install packages](#install-packages)
 - [Configure git hooks](#configure-git-hooks)
 - [Run unit tests](#run-unit-tests)
+- [Execute](#execute)
 
 
 Dado um array de "jobs" para execução, no qual cada posição possui um objeto com os seguintes atributos:
@@ -101,4 +102,34 @@ make test.unit -j 4 --output-sync
 # single version
 # make test.unit-<version>
 make test.unit-3.7
+```
+
+## Execute
+
+Just run the following command:
+
+```bash
+python scheduler.py
+```
+
+Show parameters:
+
+```bash
+python scheduler.py help
+
+usage: scheduler.py [-h] [-f JSON_FILE] [-s START] [-e FINISH] [-m MAX_WINDOW]
+
+    Execute jobs in window scheduled.
+    
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f JSON_FILE, --json-file JSON_FILE
+                        json file path (default: 'jobs.json')
+  -s START, --start START
+                        schedule starts in (Y-m-d H:M:S) format (default: '2019-11-10 09:00:00')
+  -e FINISH, --finish FINISH
+                        schedule finishes in (Y-m-d H:M:S) format (default: '2019-11-11 12:00:00')
+  -m MAX_WINDOW, --max-window MAX_WINDOW
+                        max execution windows per day (default: '8 horas')
 ```

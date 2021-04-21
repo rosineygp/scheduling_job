@@ -1,6 +1,8 @@
 import json
 from datetime import datetime, timedelta
 import re
+import argh
+import os
 
 
 def str_to_time(strtime):
@@ -121,9 +123,17 @@ def sum_until_max(slice, max):
     return result
 
 
-if __name__ == "__main__":
-    with open('jobs.json') as json_file:
-        data = json.load(json_file)
+@argh.arg('-f', '--json-file',  help="json file path", default='jobs.json')
+@argh.arg('-s', '--start',      help='schedule starts in (Y-m-d H:M:S) format', default='2019-11-10 09:00:00')
+@argh.arg('-e', '--finish',     help='schedule finishes in (Y-m-d H:M:S) format', default='2019-11-11 12:00:00')
+@argh.arg('-m', '--max-window', help='max execution windows per day', default='8 horas')
+def scheduler(json_file='jobs.json', start='2019-11-10 09:00:00', finish='2019-11-11 12:00:00', max_window='8 horas'):
+    """
+    Execute jobs in window scheduled.
+    """
+
+    with open(json_file) as f:
+        data = json.load(f)
 
     # normalize data
     for i in data:
@@ -135,11 +145,11 @@ if __name__ == "__main__":
     data = sorted(data, key=lambda k: k['Data Máxima de conclusão'])
 
     # generate initial max_time like docs
-    max_time = str_natural_to_time('8 horas')
+    max_time = str_natural_to_time(max_window)
 
     # remove jobs outside execution window
-    ini = str_to_time("2019-11-10 09:00:00")
-    end = str_to_time("2019-11-11 12:00:00")
+    ini = str_to_time(start)
+    end = str_to_time(finish)
 
     wf = make_window_filter(ini, end)
     filtered = list(filter(wf, data))
@@ -160,4 +170,8 @@ if __name__ == "__main__":
             out.append(items)
             i += len(items)
 
-    print(out)
+    return repr(out)
+
+
+if __name__ == "__main__":
+    argh.dispatch_command(scheduler)
