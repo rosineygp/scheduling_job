@@ -12,17 +12,22 @@ lint.pylint:
 	run: pip install pylint
 	run: 'find . -type f -name "*.py" | xargs pylint -E'
 
-test.unit:
+test.unit-%:
 	@$(dkr)
-	instance: python:3.8
+	instance: python:$*
 	run: python test_scheduler.py
 
-pre-commit: format.autopep8 lint.pylint test.unit
+test.unit: test.unit-3.6 test.unit-3.7 test.unit-3.8 test.unit-3.9
+
+pre-commit: 
+	make --silent format.autopep8 
+	make --silent lint.pylint
+	make --silent test.unit -j 4 --output-sync
 
 git.hooks:
 	$(MAKE) .git/hooks/pre-commit
 	$(MAKE) .git/hooks/commit-msg
-	
+
 .git/hooks/pre-commit:
 	echo "make pre-commit" > .git/hooks/pre-commit
 	chmod +x .git/hooks/pre-commit
