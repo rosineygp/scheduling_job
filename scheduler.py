@@ -1,9 +1,6 @@
 import json
 from datetime import datetime, timedelta
 import re
-import pprint
-
-pp = pprint.PrettyPrinter()
 
 
 def str_to_time(strtime):
@@ -161,4 +158,4 @@ if __name__ == "__main__":
       out.append(items)
       i += len(items)
 
-  pp.pprint(out)
+  print(out)
